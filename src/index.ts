@@ -1,13 +1,19 @@
+import "./style.css";
+
 const canvas = document.querySelector("canvas")!;
 const ctx = canvas.getContext("2d")!;
 
-const CANVAS_SIZE = 640;
-const DEBUG_COLOR = "#ff00ff";
+const CANVAS_SIZE = 512;
 
 canvas.width = CANVAS_SIZE;
 canvas.height = CANVAS_SIZE;
 canvas.style.width = `${CANVAS_SIZE}px`;
 canvas.style.height = `${CANVAS_SIZE}px`;
+
+interface ImageFile {
+  value: HTMLImageElement;
+  name: string;
+}
 
 function createLoop(fn: (...args: any[]) => any) {
   const run = () => {
@@ -46,7 +52,7 @@ function drawHandles(
     ctx.fillRect(x1, y1, width, height);
   }
 
-  ctx.fillStyle = "white";
+  ctx.fillStyle = "aqua";
 
   ctx.fillRect(x1 - size / 2, y1 - size / 2, size, size);
   ctx.fillRect(x2 - size / 2, y1 - size / 2, size, size);
@@ -56,16 +62,19 @@ function drawHandles(
 
 function main() {
   const input = document.querySelector("input");
-  const cropButton = document.querySelector("button");
-  let image: any = null;
+  const clipButton = document.querySelector("button");
 
-  let x1 = 25;
-  let x2 = CANVAS_SIZE - 25;
-  let y1 = 25;
-  let y2 = CANVAS_SIZE - 25;
-  const size = 25;
+  clipButton!.style.display = "none";
 
-  cropButton?.addEventListener("click", () => {
+  let image: ImageFile | null = null;
+
+  let x1 = 12;
+  let x2 = CANVAS_SIZE - 12;
+  let y1 = 12;
+  let y2 = CANVAS_SIZE - 12;
+  const size = 12;
+
+  clipButton?.addEventListener("click", () => {
     if (image) {
       const width = distance([x1, y1], [x2, y1]);
       const height = distance([x2, y1], [x2, y2]);
@@ -75,11 +84,11 @@ function main() {
       cvs
         .getContext("2d")
         ?.drawImage(
-          image,
+          image.value,
           0,
           0,
-          image.width,
-          image.height,
+          image.value.width,
+          image.value.height,
           0,
           0,
           canvas.width,
@@ -105,23 +114,30 @@ function main() {
       const img = new Image();
       img.src = url;
       img.onload = () => {
-        console.log(img.src);
+        const link = document.createElement("a");
+        link.download = image!.name;
+        link.href = url;
+        link.click();
       };
     }
   });
 
   input?.addEventListener("change", (ev) => {
-    const fileImage = (ev.target as HTMLInputElement).files?.[0];
-    if (fileImage) {
+    const file = (ev.target as HTMLInputElement).files?.[0];
+    if (file) {
       const reader = new FileReader();
 
       reader.onload = (ev) => {
         const img = new Image();
         img.src = ev.target?.result as string;
-        image = img;
+        image = {
+          value: img,
+          name: file.name,
+        };
+        clipButton!.style.display = "block";
       };
 
-      reader.readAsDataURL(fileImage);
+      reader.readAsDataURL(file);
     }
   });
 
@@ -217,11 +233,11 @@ function main() {
   createLoop(() => {
     if (image) {
       ctx.drawImage(
-        image,
+        image.value,
         0,
         0,
-        image.width,
-        image.height,
+        image.value.width,
+        image.value.height,
         0,
         0,
         canvas.width,

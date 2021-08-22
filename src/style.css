@@ -1,0 +1,50 @@
+* {
+  box-sizing: border-box;
+  font-family: Verdana, Geneva, Tahoma, sans-serif;
+}
+
+html,
+body {
+  height: 100%;
+}
+body {
+  padding-top: 0px;
+  margin: 0;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+}
+
+canvas {
+  margin-top: 32px;
+  border: 1px solid black;
+}
+
+.inputs {
+  display: flex;
+  flex-direction: column;
+}
+
+.clip-button {
+  margin-top: 12px;
+}
+
+.input {
+  display: none;
+}
+
+.input-label,
+.clip-button {
+  font-size: 16px;
+  background-color: #6e11e7;
+  padding: 12px;
+  color: #fff;
+  border-radius: 4px;
+  cursor: pointer;
+}
+
+.input-label:hover,
+.clip-button:hover {
+  background-color: #8030e9;
+}

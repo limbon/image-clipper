@@ -22,6 +22,12 @@ module.exports = {
         },
       },
       {
+        test: /.css$/,
+        include: [path.resolve(__dirname, "src")],
+        exclude: [path.resolve(__dirname, "node_modules")],
+        use: ["style-loader", "css-loader"],
+      },
+      {
         test: /.ts$/,
         include: [path.resolve(__dirname, "src")],
         exclude: [path.resolve(__dirname, "node_modules")],
@@ -33,7 +39,7 @@ module.exports = {
     ],
   },
   resolve: {
-    extensions: [".json", ".js", ".jsx", ".ts"],
+    extensions: [".json", ".js", ".jsx", ".ts", ".css"],
   },
   plugins: [
     new HtmlWebpackPlugin({
